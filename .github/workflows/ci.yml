@@ -22,7 +22,10 @@ jobs:
           sudo luarocks install luaunit
 
       - name: Run tests
-        run: lua5.4 tests/test_cluster_pulse.lua
+        run: |
+          export LUA_PATH="/usr/local/share/lua/5.4/?.lua;/usr/local/share/lua/5.4/?/init.lua;$(lua5.4 -e 'print(package.path)')"
+          export LUA_CPATH="/usr/local/lib/lua/5.4/?.so;$(lua5.4 -e 'print(package.cpath)')"
+          lua5.4 tests/test_cluster_pulse.lua
 
   docker:
     runs-on: ubuntu-latest
