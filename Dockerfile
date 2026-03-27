@@ -4,7 +4,11 @@ RUN apk add --no-cache lua5.4 lua5.4-dev luarocks5.4 gcc musl-dev
 
 WORKDIR /app
 
-RUN luarocks-5.4 install pegasus && \
+# Install pegasus deps manually (skip lzlib - optional gzip support)
+RUN luarocks-5.4 install mimetypes && \
+    luarocks-5.4 install luasocket && \
+    luarocks-5.4 install luafilesystem && \
+    luarocks-5.4 install pegasus --deps-mode=none && \
     luarocks-5.4 install dkjson
 
 COPY src/ src/
