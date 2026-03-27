@@ -9,19 +9,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: alpine:3.20
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Lua and dependencies
         run: |
-          apk add --no-cache lua5.4 lua5.4-dev luarocks5.4 gcc musl-dev zlib-dev
-          luarocks-5.4 install lzlib ZLIB_INCDIR=/usr/include ZLIB_LIBDIR=/usr/lib
-          luarocks-5.4 install pegasus
-          luarocks-5.4 install dkjson
-          luarocks-5.4 install luaunit
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 liblua5.4-dev luarocks zlib1g-dev
+          sudo luarocks install pegasus
+          sudo luarocks install dkjson
+          sudo luarocks install luaunit
 
       - name: Run tests
         run: lua5.4 tests/test_cluster_pulse.lua
