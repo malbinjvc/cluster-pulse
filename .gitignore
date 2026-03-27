@@ -1,0 +1,5 @@
+*.luac
+.env
+.env.*
+*.pem
+*.key
