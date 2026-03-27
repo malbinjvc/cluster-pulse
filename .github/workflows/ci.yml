@@ -20,12 +20,16 @@ jobs:
           sudo luarocks install pegasus
           sudo luarocks install dkjson
           sudo luarocks install luaunit
+          echo "--- Checking luarocks install paths ---"
+          luarocks show luaunit 2>/dev/null || true
+          find /usr/local -name "luaunit*" 2>/dev/null || true
+          lua5.4 -e "print(package.path)"
 
       - name: Run tests
-        run: |
-          export LUA_PATH="/usr/local/share/lua/5.4/?.lua;/usr/local/share/lua/5.4/?/init.lua;$(lua5.4 -e 'print(package.path)')"
-          export LUA_CPATH="/usr/local/lib/lua/5.4/?.so;$(lua5.4 -e 'print(package.cpath)')"
-          lua5.4 tests/test_cluster_pulse.lua
+        env:
+          LUA_PATH: "/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;/usr/local/share/lua/5.4/?.lua;/usr/local/share/lua/5.4/?/init.lua;/usr/share/lua/5.4/?.lua;/usr/share/lua/5.4/?/init.lua;./?.lua;./?/init.lua"
+          LUA_CPATH: "/usr/local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.4/?.so;/usr/lib/x86_64-linux-gnu/lua/5.4/?.so;./?.so"
+        run: lua5.4 tests/test_cluster_pulse.lua
 
   docker:
     runs-on: ubuntu-latest
